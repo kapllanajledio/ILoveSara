@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will you be my Wife? 💍</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fce4ec;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        h1 {
+            color: #ad1457;
+            font-size: 2.5rem;
+            margin: 10px;
+        }
+
+        #main-gif {
+            width: 250px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .btn-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 150px;
+            width: 100%;
+            position: relative;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        #yes-btn {
+            background-color: #43a047;
+            color: white;
+        }
+
+        #no-btn {
+            background-color: #e53935;
+            color: white;
+        }
+
+        .dedica {
+            font-size: 1.3rem;
+            color: #ad1457;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .regalo {
+            font-size: 1rem;
+            color: #d81b60;
+            margin-top: 30px;
+            font-weight: bold;
+            border: 2px dashed #ad1457;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body onclick="startMusic()">
+
+<audio id="bg-music" loop>
+    <source src="https://www.chosic.com/wp-content/uploads/2021/04/And-So-It-Begins-Inspired-By-Crush-Music.mp3">
+</audio>
+
+<div class="container" id="content">
+
+    <!-- PRIMA PAGINA (index_2) -->
+    <h1>Will you be my Wife? 💕</h1>
+
+    <img id="main-gif"
+        src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG56Znd6bjR6Ynp4Znd6bjR6Ynp4Znd6bjR6Ynp4Znd6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif">
+
+    <div class="btn-wrapper">
+        <button id="yes-btn" onclick="celebrate()">Yes</button>
+        <button id="no-btn" onclick="moveNo()">No</button>
+    </div>
+
+</div>
+
+<script>
+    const music = document.getElementById('bg-music');
+    let musicStarted = false;
+    let yesScale = 1;
+
+    function startMusic() {
+        if (!musicStarted) {
+            music.play().catch(() => {});
+            musicStarted = true;
+        }
+    }
+
+    function moveNo() {
+        startMusic();
+
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const rect = yesBtn.getBoundingClientRect();
+
+        let x, y;
+
+        do {
+            x = Math.random() * (window.innerWidth - 150);
+            y = Math.random() * (window.innerHeight - 100);
+        } while (
+            x > rect.left - 100 && x < rect.right + 100 &&
+            y > rect.top - 100 && y < rect.bottom + 100
+        );
+
+        noBtn.style.position = "fixed";
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+
+        yesScale += 0.4;
+        yesBtn.style.transform = `scale(${yesScale})`;
+
+        const phrases = ["Sei sicura?", "Davvero?", "Ripensaci!", "Ma no!", "Ultima chance 😏"];
+        noBtn.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+    }
+
+    function celebrate() {
+        startMusic();
+
+        const content = document.getElementById('content');
+
+        // SECONDA PAGINA (presa da index.html)
+        content.innerHTML = `
+            <h1>Yayy!!! Happy birthday my love! 💍❤️</h1>
+            <img id="main-gif" src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif">
+            <div class="dedica">Ti amo come le stelle e la galassia e l'universo e lo spazio e l'infinito ❤️</div>
+            <div class="regalo">C'è un regalo che ti aspetta... vai da "La Casa del Fiore"</div>
+        `;
+
+        // coriandoli/petali (da index.html)
+        const duration = 15000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff0000', '#ff69b4']
+            });
+
+            confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff0000', '#ff69b4']
+            });
+
+            if (Date.now() < end) requestAnimationFrame(frame);
+        })();
+    }
+</script>
+
+</body>
+</html>
